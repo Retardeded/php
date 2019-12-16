@@ -35,9 +35,9 @@
 				$lineNumber = 1;
 				while (($line = fgets($info)) !== false) {
 					if ($lineNumber == 1) {
-						echo "<h1>Tytuł bloga: </strong>" . $line . "</h1>";
+						echo "<h1>Nazwa: </strong>" . $line . "</h1>";
 					} else if ($lineNumber == 3) {
-						echo "<h3>Opis bloga: </strong>" . $line . "</h3>";
+						echo "<h4>Opis: </strong>" . $line . "</h4>";
 					}
 					if ($lineNumber >= 4) {
 						echo $line . "<br />";
@@ -46,20 +46,14 @@
 				}
 				fclose($info);
 
-
-				// Menu dodaj wpis
-				echo "Dodaj nowy wpis";
-
-				// Wyświetl wpisy i komentarze
 				$filePattern = '/\\d{16}$/';
 				$iterator = new DirectoryIterator($catalog);
 				foreach ($iterator as $currentFile) {
 					if (!$currentFile->isDir() && preg_match($filePattern, $currentFile)){
 						$content = file_get_contents($iterator->getPathName());
-						echo "<h2>Wpis: " . $currentFile . "</h2>";
+						echo "<h3>Wpis: " . $currentFile . "</h3>";
 						echo $content . "<br /></br >";
 
-						// Wyświetl załączniki
 						$annexPattern = '/' . $currentFile . '[1-3]/';
 						foreach (new DirectoryIterator($catalog) as $file) {
 							if (preg_match($annexPattern, $file)) {
@@ -69,23 +63,21 @@
 						}
 						echo "<br />";
 
-						// Wyświetl komentarze
 						if (file_exists($catalog . $currentFile . ".k")) {
 							foreach (new DirectoryIterator($catalog . $currentFile . ".k") as $file2) {
-								if(!$file2->isDot() && !$file2->isDir()){
-									//echo $plk->getPathName() . "<br />";
+								if(!$file2->isDir()){
 
 									$commentFile = fopen($file2->getPathName(), 'r');
 									$lineNumber = 1;
 									while (($line = fgets($commentFile)) !== false) {
 										if ($lineNumber == 1) {
-											echo "<strong>Typ komentarza: </strong>" . $line . "<br />";
+											echo "<h4>Typ komentarza: </h4>" . $line . "<br />";
 										} else if ($lineNumber == 2) {
-											echo "<strong>Data komentarza: </strong>" . $line . "<br />";
+											echo "<h4>Data komentarza: </h4>" . $line . "<br />";
 										} else if ($lineNumber == 3) {
-											echo "<strong>Autor komentarza: </strong>" . $line . "<br />";
+											echo "<h4>Autor komentarza: </h4>" . $line . "<br />";
 										} else if ($lineNumber >= 4) {
-											echo $line . "<br />";
+											echo "<h4>Treść: </h4>" . $line . "<br />";
 										}
 										$lineNumber = $lineNumber + 1;
 									}
